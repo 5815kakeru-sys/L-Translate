@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#111111" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="L-Translate" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <title>L-Translate</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<main class="app" id="app">
+
+  <section class="screen active splash" data-screen="splash">
+    <div class="logo">♡</div>
+    <div class="eyebrow" style="margin-top:24px">LOVE TRANSLATION · PROTOTYPE 02</div>
+    <h1>L-Translate</h1>
+    <p class="muted">ふたりの「好き」に、字幕をつける。</p>
+    <button class="btn" id="beginBtn">はじめる</button>
+  </section>
+
+  <section class="screen" data-screen="rules">
+    <div class="eyebrow">HOW TO PLAY</div>
+    <h2>ルールはシンプル。</h2>
+    <p class="muted">正解を当てるゲームではありません。「そう感じるんだ」を見つけるゲームです。</p>
+    <div class="stack section">
+      <div class="rule"><div class="num">1</div><div><h3>まず、相手を予想</h3><p class="muted">「相手ならどう答える？」を秘密で選びます。</p></div></div>
+      <div class="rule"><div class="num">2</div><div><h3>次に、自分の本音</h3><p class="muted">相手に見せず、自分に一番近い答えを選びます。</p></div></div>
+      <div class="rule"><div class="num">3</div><div><h3>ふたり揃ったら答え合わせ</h3><p class="muted">予想が当たっても外れても、どちらも発見です。</p></div></div>
+      <div class="rule"><div class="num">4</div><div><h3>「なぜ？」まで掘る</h3><p class="muted">同じ答えでも、理由が同じとは限りません。</p></div></div>
+    </div>
+    <div class="card section"><b>♡ ひとつだけ約束</b><p class="muted">「普通はこうでしょ」ではなく、「へえ、そう感じるんだ」で聞く。</p></div>
+    <button class="btn" id="rulesNext">ふたりを登録する</button>
+  </section>
+
+  <section class="screen" data-screen="setup">
+    <div class="eyebrow">PLAYERS</div>
+    <h2>誰と翻訳する？</h2>
+    <form id="setupForm" class="stack section">
+      <label>Player 1<input id="nameA" type="text" maxlength="16" placeholder="名前を入力"></label>
+      <label>Player 2<input id="nameB" type="text" maxlength="16" placeholder="名前を入力"></label>
+      <div id="setupError" class="muted" style="display:none"></div>
+      <button class="btn" type="submit">ゲームスタート</button>
+    </form>
+  </section>
+
+  <section class="screen" data-screen="game">
+    <div class="topline"><div><div class="eyebrow" id="category"></div><b id="turn"></b></div><span class="muted" id="counter"></span></div>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="question" id="question"></div>
+    <div class="chips">
+      <button class="chip" id="meaningBtn" type="button">お題の意味</button>
+      <button class="chip" id="exampleBtn" type="button">例えば？</button>
+    </div>
+    <div class="help card" id="meaningBox"><b>このお題で知りたいこと</b><p id="meaning"></p></div>
+    <div class="help card" id="exampleBox"><b>例えば</b><p id="example"></p></div>
+    <div class="instruction" id="instruction"></div>
+    <form id="answerForm">
+      <div class="stack" id="choices"></div>
+      <button class="btn" type="submit">決定してロック 🔒</button>
+      <div id="answerError" class="muted" style="display:none">ひとつ選んでね。</div>
+    </form>
+  </section>
+
+  <section class="screen center" data-screen="handoff" style="padding-top:16vh">
+    <div class="bigicon">🔒</div>
+    <h2 id="handoffTitle"></h2>
+    <p class="muted">回答は隠しました。スマホを相手に渡してね。</p>
+    <button class="btn" id="handoffBtn">準備できた</button>
+  </section>
+
+  <section class="screen center" data-screen="ready" style="padding-top:16vh">
+    <div class="bigicon">♡</div>
+    <div class="eyebrow">READY TO TRANSLATE</div>
+    <h2>ふたりの回答が揃いました。</h2>
+    <p class="muted">ここから初めて、お互いの本音を公開します。</p>
+    <button class="btn" id="revealBtn">せーので答え合わせ</button>
+  </section>
+
+  <section class="screen" data-screen="result">
+    <div class="eyebrow">TRANSLATE</div>
+    <h2 id="resultQuestion"></h2>
+    <div class="stack section" id="resultCards"></div>
+    <div class="card section"><b>今回見えたこと</b><p class="muted" id="insight"></p></div>
+    <button class="btn" id="deepBtn">「なぜ？」を掘ってみる</button>
+  </section>
+
+  <section class="screen" data-screen="deep">
+    <div class="eyebrow">DEEP TRANSLATE</div>
+    <h2 id="deepTitle"></h2>
+    <p class="muted" id="deepBase"></p>
+    <form id="deepForm" class="section">
+      <div class="stack" id="deepChoices"></div>
+      <label class="section">自分の言葉で補足<textarea id="deepText" maxlength="220" placeholder="本当はこういう感覚、など"></textarea></label>
+      <button class="btn" type="submit">本音を残す</button>
+    </form>
+  </section>
+
+  <section class="screen" data-screen="translation">
+    <div class="eyebrow">OUR TRANSLATION</div>
+    <h2>今回のふたり字幕</h2>
+    <div class="stack section" id="translationCards"></div>
+    <div class="card section"><b>💬 話してみる</b><p id="talkPrompt"></p></div>
+    <button class="btn" id="nextBtn">次のお題へ</button>
+  </section>
+
+  <section class="screen" data-screen="summary">
+    <div class="center">
+      <div class="bigicon">♡</div>
+      <div class="eyebrow">TRANSLATION REPORT</div>
+      <h2>ふたりの翻訳結果</h2>
+    </div>
+
+    <div class="summary-grid section">
+      <div class="stat"><span class="muted">理解できてた</span><br><b id="understoodStat"></b></div>
+      <div class="stat"><span class="muted">価値観が近い</span><br><b id="sameStat"></b></div>
+      <div class="stat"><span class="muted">新しい発見</span><br><b id="discoverStat"></b></div>
+    </div>
+
+    <div class="card section"><b>🧠 それぞれのものの見方</b>
+      <p class="muted">今回の回答から見えた、恋愛における考え方や感じ方の傾向です。ひとつの答えで決めつけず、複数のお題を重ねて見ます。</p>
+      <div id="personTendencies" class="stack" style="margin-top:12px"></div>
+    </div>
+    <div class="card section"><b>🧭 全体傾向</b><p id="trend"></p></div>
+    <div class="card section"><b>♡ 似ているところ</b><div id="similar" class="stack" style="margin-top:10px"></div></div>
+    <div class="card section"><b>↔ 違いが出たところ</b><div id="different" class="stack" style="margin-top:10px"></div></div>
+    <div class="card section"><b>⚠ 気をつけたい翻訳事故</b><div id="care" class="stack" style="margin-top:10px"></div></div>
+    <div class="card section"><b>💬 L-Translateからのまとめ</b><p id="finalText"></p></div>
+
+    <details class="card section">
+      <summary><b>各お題の取説を見る</b></summary>
+      <div id="manualBook" class="stack" style="margin-top:14px"></div>
+    </details>
+
+    <button class="btn secondary" id="restartBtn">タイトルへ戻る</button>
+  </section>
+
+</main>
+
+<script src="cards.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
